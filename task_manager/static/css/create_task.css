@@ -1,0 +1,43 @@
+
+/* Customize checkbox appearance */
+.custom-checkbox .form-check-input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px; /* Adjust spacing as needed */
+    background-color: #fff; /* Dark background color */
+    border: 2.5px solid #333; /* Dark border */
+    border-radius: 4px; /* Rounded corners */
+}
+
+/* Change checkbox color when checked */
+.custom-checkbox .form-check-input[type="checkbox"]:checked {
+    background-color: green; /* Green background color when checked */
+    border-color: green; /* Green border color when checked */
+}
+
+
+/* Center the message container */
+#message-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-30%, -30%);
+    z-index: 9999;
+    text-align: center;
+}
+
+/* Styling for the message box */
+.message-box {
+    background-color: #4CAF50; /* Green background color */
+    color: white; /* White text color */
+    padding: 20px; /* Padding around the message */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Drop shadow */
+    border-solid: 3px
+    font-weight: bold;
+}
+
+/* Hide the message container by default */
+.hidden {
+    display: none;
+}
