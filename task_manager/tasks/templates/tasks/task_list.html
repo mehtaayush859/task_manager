@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Task List{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Task List</h1>
+    {% if tasks %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                 <th>Priority</th>
+                <th>Due Date</th>
+                <th>Completed</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.priority }}</td>
+                <td>{{ task.due_date }}</td>
+                <td>{% if task.completed %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <a href="{% url 'update_task' task.id %}" class="btn btn-primary btn-sm">Update</a>
+                    <form class="delete-form" method="post" action="{% url 'delete_task' task.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No tasks available.</p>
+    {% endif %}
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOMContentLoaded event fired!');
+    const deleteForms = document.querySelectorAll('.delete-form');
+    console.log('Selected delete forms:', deleteForms);
+    deleteForms.forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const confirmDelete = confirm('Are you sure you want to delete this task?');
+            if (confirmDelete) {
+                // Submit the form if user confirms deletion
+                form.submit();
+                // Show a success message after submission
+                alert('Task deleted successfully.');
+            }
+        });
+    }); // <-- Add missing closing parenthesis
+}); // <-- Add missing closing parenthesis
+</script>
+
+{% endblock %}
