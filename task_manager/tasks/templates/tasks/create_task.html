@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block title %}Create Task{% endblock %}
+
+
+{% block head %}
+    <!-- Additional styles specific to create_task.html -->
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/create_task.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Create Task</h5>
+        </div>
+        <div class="card-body">
+            <form id="createTaskForm" method="post" action="{% url 'create_task' %}">
+                {% csrf_token %}
+                <label for="id_assignee">Assignee:</label>
+                <select name="assignee" id="id_assignee" class="form-control">
+                    <option value="">Select Assignee</option>
+                    {% for user in assignees %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                    <div id="titleError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    <div id="descriptionError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="priority" class="form-label">Priority</label>
+                    <select class="form-select" id="priority" name="priority" required>
+                        <option value="">Select Priority</option>
+                        <option value="Low">Low(P3)</option>
+                        <option value="Medium">Medium(P2)</option>
+                        <option value="High">High(P1)</option>
+                    </select>
+                    <div id="priorityError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="due_date" class="form-label">Due Date</label>
+                    <input type="date" class="form-control" id="due_date" name="due_date" required>
+                    <div id="dueDateError" class="invalid-feedback"></div>
+                </div>
+                <div class="mb-3 form-check custom-checkbox">
+                    <input type="checkbox" class="form-check-input" id="completed" name="completed">
+                    <label class="form-check-label" for="completed">Completed</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+        <div id="message-container" class="hidden">
+            <div class="message-box success">
+                <p id="message"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function ()
+{
+    const form = document.getElementById('createTaskForm');
+    form.addEventListener('submit', function (event) {
+        const titleInput = document.getElementById('title');
+        const descriptionInput = document.getElementById('description');
+        const prioritySelect = document.getElementById('priority');
+        const dueDateInput = document.getElementById('due_date');
+        const titleError = document.getElementById('titleError');
+        const descriptionError = document.getElementById('descriptionError');
+        const priorityError = document.getElementById('priorityError');
+        const dueDateError = document.getElementById('dueDateError');
+
+        // Reset error messages
+        titleError.textContent = '';
+        descriptionError.textContent = '';
+        priorityError.textContent = '';
+        dueDateError.textContent = '';
+
+        // Check title length
+        if (titleInput.value.length < 5 || titleInput.value.length > 50) {
+            titleError.textContent = 'Title must be between 5 and 50 characters.';
+            titleInput.classList.add('is-invalid');
+            event.preventDefault();
+        }
+
+        // Check description length
+        if (descriptionInput.value.length < 10 || descriptionInput.value.length > 200) {
+            descriptionError.textContent = 'Description must be between 10 and 200 characters.';
+            descriptionInput.classList.add('is-invalid');
+            event.preventDefault();
+        }
+
+        // Check priority selection
+        if (!prioritySelect.value) {
+            priorityError.textContent = 'Please select priority.';
+            prioritySelect.classList.add('is-invalid');
+            event.preventDefault();
+        }
+
+        // Check due date
+        if (!dueDateInput.value) {
+            dueDateError.textContent = 'Please select due date.';
+            dueDateInput.classList.add('is-invalid');
+            event.preventDefault();
+        }
+    });
+});
+
+// Function to display message in the center of the screen
+function showMessage(message)
+{
+    var messageContainer = document.getElementById('message-container');
+    var messageElement = document.getElementById('message');
+    messageElement.textContent = message;
+    messageContainer.classList.remove('hidden');
+}
+
+// Example usage: Show "Task created" message when the form is submitted
+document.getElementById('createTaskForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // AJAX request to create the task
+    // After task creation is successful, call showMessage('Task created');
+    // Replace this with your actual AJAX code
+    showMessage('Task created, Redirecting to Home Page');
+    setTimeout(function() {
+                window.location.href = "{% url 'home' %}";
+            }, 0900); // Adjust the delay time as needed (in milliseconds)
+});
+</script>
+{% endblock %}
